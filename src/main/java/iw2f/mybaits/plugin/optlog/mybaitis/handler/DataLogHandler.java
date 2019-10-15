@@ -1,8 +1,4 @@
-package iw2f.mybaits.plugin.optlog.mybaitis;
-
-import iw2f.mybaits.plugin.optlog.mybaitis.handler.DeleteInfo;
-import iw2f.mybaits.plugin.optlog.mybaitis.handler.InsertInfo;
-import iw2f.mybaits.plugin.optlog.mybaitis.handler.UpdateInfo;
+package iw2f.mybaits.plugin.optlog.mybaitis.handler;
 
 /**
  * 

@@ -3,7 +3,6 @@ package iw2f.mybaits.plugin.optlog.mybaitis.handler;
 import java.util.List;
 import java.util.Map;
 
-import iw2f.mybaits.plugin.optlog.mybaitis.BasicInfo;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.CompareResult;
 import lombok.Getter;
 

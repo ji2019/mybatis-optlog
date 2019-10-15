@@ -1,6 +1,5 @@
 package iw2f.mybaits.plugin.optlog.mybaitis.handler;
 
-import iw2f.mybaits.plugin.optlog.mybaitis.BasicInfo;
 import lombok.Getter;
 
 /**

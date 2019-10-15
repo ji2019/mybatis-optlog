@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import iw2f.mybaits.plugin.optlog.mybaitis.DataLogHandler;
+import iw2f.mybaits.plugin.optlog.mybaitis.handler.DataLogHandler;
 import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.logs.OptLogStatementInterceptor;
 import iw2f.mybaits.plugin.optlog.service.OptLogger;
 import lombok.AllArgsConstructor;

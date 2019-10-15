@@ -16,7 +16,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.SqlUtils;
+import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.utils.SqlUtils;
 
 /**
  * 

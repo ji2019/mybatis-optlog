@@ -1,4 +1,4 @@
-package iw2f.mybaits.plugin.optlog.mybaitis;
+package iw2f.mybaits.plugin.optlog.mybaitis.handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import iw2f.mybaits.plugin.optlog.LogContext;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.CompareResult;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.OptBo;
-import iw2f.mybaits.plugin.optlog.mybaitis.handler.DeleteInfo;
-import iw2f.mybaits.plugin.optlog.mybaitis.handler.InsertInfo;
-import iw2f.mybaits.plugin.optlog.mybaitis.handler.UpdateInfo;
 import lombok.SneakyThrows;
 
 /**
@@ -44,7 +41,7 @@ public class DataLogDeal implements DataLogHandler {
 		opt.setData(insertInfo.getInsertObj());
 		opt.setDesc(sb.toString());
 		LogContext.optLog().getOpts().add(opt);
-		logger.info("          " + sb.toString());
+		logger.debug("          " + sb.toString());
 	}
 
 	/*
@@ -76,7 +73,7 @@ public class DataLogDeal implements DataLogHandler {
 		opt.setData(updateer);
 		opt.setDesc(sb.toString());
 		LogContext.optLog().getOpts().add(opt);
-		logger.info("          " + sb.toString());
+		logger.debug("          " + sb.toString());
 	}
 
 	/*
@@ -95,6 +92,6 @@ public class DataLogDeal implements DataLogHandler {
 		opt.setData(deleteInfo.getDeleteObj());
 		opt.setDesc(sb.toString());
 		LogContext.optLog().getOpts().add(opt);
-		logger.info("          " + sb.toString());
+		logger.debug("          " + sb.toString());
 	}
 }

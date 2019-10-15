@@ -10,7 +10,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import iw2f.mybaits.plugin.optlog.mybaitis.BasicInfo;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.CompareResult;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.FieldInfo;
 import lombok.AllArgsConstructor;

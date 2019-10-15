@@ -28,14 +28,14 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSON;
 
 import iw2f.mybaits.plugin.optlog.LogContext;
-import iw2f.mybaits.plugin.optlog.mybaitis.BasicInfo;
-import iw2f.mybaits.plugin.optlog.mybaitis.DataLogHandler;
+import iw2f.mybaits.plugin.optlog.mybaitis.handler.BasicInfo;
+import iw2f.mybaits.plugin.optlog.mybaitis.handler.DataLogHandler;
 import iw2f.mybaits.plugin.optlog.mybaitis.handler.DeleteInfo;
 import iw2f.mybaits.plugin.optlog.mybaitis.handler.InsertInfo;
 import iw2f.mybaits.plugin.optlog.mybaitis.handler.UpdateInfo;
-import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.SqlUtils;
-import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.U;
+import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.utils.DataUtils;
 import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.utils.PluginUtil;
+import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.utils.SqlUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -110,6 +110,11 @@ public class OptLogStatementInterceptor implements Interceptor {
 		// 获取原始sql
 		Configuration configuration = mappedStatement.getConfiguration(); // 获取节点的配置
 		String sql = SqlUtils.getCompleteSQL(configuration, boundSql);
+		SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
+		//因为替换后会出现有的值为空。SQL解析错误。就用原生的SQL了
+		if(SqlCommandType.INSERT.equals(sqlCommandType)) {
+			sql = boundSql.getSql();
+		}
 		log.info("sql ===>> " + sql);
 		List<Object> params = SqlUtils.getSqlParams(configuration, boundSql);
 		log.info("params ===>> " + params);
@@ -184,7 +189,7 @@ public class OptLogStatementInterceptor implements Interceptor {
 						updateData.put(column_name, column_value);
 					}
 					// 更新之前数据
-					List<Map<String, Object>> preUpdateData = U.getPreUpdateData(dataSource, sql);
+					List<Map<String, Object>> preUpdateData = DataUtils.getPreUpdateData(dataSource, sql);
 					if (!preUpdateData.isEmpty()) {
 						UpdateInfo updateInfo = new UpdateInfo(new BasicInfo(dataSource, tableName), preUpdateData,
 								updateData);
@@ -197,7 +202,7 @@ public class OptLogStatementInterceptor implements Interceptor {
 				if (stmt instanceof Delete) {
 					Delete drop = (Delete) stmt;
 					String tableName = drop.getTable().getName();
-					List<Map<String, Object>> delObj = U.getDelData(dataSource, sql);
+					List<Map<String, Object>> delObj = DataUtils.getDelData(dataSource, sql);
 					if (!delObj.isEmpty()) {
 						DeleteInfo deleteInfo = new DeleteInfo(new BasicInfo(dataSource, tableName), delObj);
 						// 调用自定义处理方法

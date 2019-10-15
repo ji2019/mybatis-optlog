@@ -2,7 +2,6 @@ package iw2f.mybaits.plugin.optlog.mybaitis.handler;
 
 import java.util.LinkedHashMap;
 
-import iw2f.mybaits.plugin.optlog.mybaitis.BasicInfo;
 import lombok.Getter;
 
 /**

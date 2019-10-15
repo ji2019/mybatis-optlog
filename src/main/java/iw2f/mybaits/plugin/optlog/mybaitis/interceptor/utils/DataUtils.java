@@ -1,4 +1,4 @@
-package iw2f.mybaits.plugin.optlog.mybaitis.interceptor;
+package iw2f.mybaits.plugin.optlog.mybaitis.interceptor.utils;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,9 +19,9 @@ import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.update.Update;
 
-public interface U {
+public interface DataUtils {
 	
-	Logger log = LoggerFactory.getLogger(U.class);
+	Logger log = LoggerFactory.getLogger(DataUtils.class);
 
 	static List<Map<String, Object>> getDelData(DataSource dataSource, String sql) {
 		try {

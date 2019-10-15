@@ -1,4 +1,4 @@
-package iw2f.mybaits.plugin.optlog.mybaitis.interceptor;
+package iw2f.mybaits.plugin.optlog.mybaitis.interceptor.utils;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
