@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.iw2f.mybatisoptlog.persistence.dao.ScoreMapper">
-
 	<insert id="insert" parameterType="Score" >
 		INSERT INTO `score`(`score_id`, `course_num`, `student_num`, `score`) VALUES (#{scoreId}, #{courseNum}, #{studentNum}, #{score})
 	</insert>
@@ -11,6 +10,4 @@
 	<select id="selectAll" resultType="Score" >
         select * from `score`
     </select>
-
-
 </mapper>

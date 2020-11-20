@@ -50,7 +50,7 @@ class DemoApplicationTests {
     @BeforeEach
     public void beforeEach() {
         log.info("beforeEach");
-        //mockMvc = MockMvcBuilders.standaloneSetup(new IndexController()).build();
+        // mockMvc = MockMvcBuilders.standaloneSetup(new IndexController()).build();
         // mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
@@ -81,7 +81,6 @@ class DemoApplicationTests {
 
     @Test
     public void testTwo3() throws Exception {
-
         String str = JSON.toJSONString(courseMapper.selectAll());
         log.info(str);
     }

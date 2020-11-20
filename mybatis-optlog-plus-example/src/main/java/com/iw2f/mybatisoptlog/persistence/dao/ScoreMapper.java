@@ -2,7 +2,6 @@ package com.iw2f.mybatisoptlog.persistence.dao;
 
 import java.util.List;
 
-import com.iw2f.mybatisoptlog.persistence.pojo.Course;
 import com.iw2f.mybatisoptlog.persistence.pojo.Score;
 import org.apache.ibatis.annotations.Mapper;
 
