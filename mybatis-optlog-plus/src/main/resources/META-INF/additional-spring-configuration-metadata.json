@@ -1,0 +1,7 @@
+{"properties": [
+  {
+    "name": "optlog.enable",
+    "type": "java.lang.String",
+    "description": "是否开启."
+  }
+]}
