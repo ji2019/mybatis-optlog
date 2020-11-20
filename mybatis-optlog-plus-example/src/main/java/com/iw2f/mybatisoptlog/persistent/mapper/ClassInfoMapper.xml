@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gymexpress.cloudhealth.persistence.dao.HrGatewayMapper">
+	<insert id="insert" parameterType="HrGateway" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO hr_gateway (device_number,device_mac,device_ip,registration_time,version,create_time,create_user,del_flag)
+		VALUES
+			(#{deviceNumber,jdbcType=INTEGER},#{deviceMac,jdbcType=VARCHAR},#{deviceIp,jdbcType=VARCHAR},now(),#{version,jdbcType=VARCHAR},now(),'system',1)
+	</insert>
+	<update id="updateById" parameterType="HrGateway" >
+		UPDATE hr_gateway 
+		SET device_ip = #{deviceIp,jdbcType=VARCHAR},device_number=#{deviceNumber,jdbcType=INTEGER},device_mac=#{deviceMac,jdbcType=VARCHAR},version=#{version,jdbcType=VARCHAR}
+		WHERE
+			gateway_id = #{gatewayId,jdbcType=BIGINT}
+	</update>
+	<select id="selectAll" resultType="HrGateway" >
+        select * from hr_gateway
+    </select>
+</mapper>
