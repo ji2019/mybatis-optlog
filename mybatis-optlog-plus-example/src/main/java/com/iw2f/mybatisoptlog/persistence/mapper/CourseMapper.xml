@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.iw2f.mybatisoptlog.persistence.dao.CourseMapper">
-	<insert id="insert" parameterType="Course" >
-		INSERT INTO course`(`course_num`, `course_name`, `course_hour`, `course_score`) VALUES (#{courseNum}, #{courseName}, #{courseHour}, #{courseScore})
-	</insert>
-	<update id="updateById" parameterType="Course" >
-		UPDATE course` SET `course_name` = #{courseName}, `course_hour` = #{courseHour}, `course_score` = #{courseScore} WHERE `course_num` =  #{courseNum}
-	</update>
-	<select id="selectAll" resultType="Course" >
-        select * from `course`
-    </select>
+<mapper
+	namespace="com.iw2f.mybatisoptlog.persistence.dao.CourseMapper">
 </mapper>

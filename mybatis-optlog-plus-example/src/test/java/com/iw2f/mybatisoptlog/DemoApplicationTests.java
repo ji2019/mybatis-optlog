@@ -2,6 +2,7 @@ package com.iw2f.mybatisoptlog;
 
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iw2f.mybatisoptlog.persistence.dao.CourseMapper;
 import com.iw2f.mybatisoptlog.persistence.dao.ScoreMapper;
 import com.iw2f.mybatisoptlog.persistence.pojo.Course;
@@ -33,7 +34,7 @@ class DemoApplicationTests {
     private MockMvc mockMvc;
 
     @Autowired
-    private ScoreMapper courseMapper;
+    private CourseMapper courseMapper;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -81,7 +82,9 @@ class DemoApplicationTests {
 
     @Test
     public void testTwo3() throws Exception {
-        String str = JSON.toJSONString(courseMapper.selectAll());
+        QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
+        List<Course> courses =  courseMapper.selectList(queryWrapper);
+        String str = JSON.toJSONString(courses);
         log.info(str);
     }
 }

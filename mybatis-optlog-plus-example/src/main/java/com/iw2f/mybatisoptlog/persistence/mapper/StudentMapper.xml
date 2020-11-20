@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.iw2f.mybatisoptlog.persistence.dao.StudentMapper">
-    <insert id="insert" parameterType="Student">
-        INSERT INTO `student`(`student_num`, `student_name`, `student_sex`, `student_birthday`)
-        VALUES (#{studentNum}, #{studentName}, #{studentSex}, #{studentBirthday})
-	</insert>
-    <update id="updateById" parameterType="Student">
-        UPDATE `student` SET `student_name` = #{studentName}, `student_sex` = #{studentSex}, `student_birthday` = #{studentBirthday} WHERE `student_num` = #{studentNum}
-	</update>
-    <select id="selectAll" resultType="Student">
-        select * from `student`
-    </select>
+<mapper
+	namespace="com.iw2f.mybatisoptlog.persistence.dao.StudentMapper">
 </mapper>

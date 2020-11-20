@@ -1,13 +1,8 @@
 package com.iw2f.mybatisoptlog.persistence.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.iw2f.mybatisoptlog.persistence.pojo.Student;
-import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
+public interface StudentMapper extends BaseMapper<Student> {
 
-@Mapper
-public interface StudentMapper {
-    void insert(Student o);
-    List<Student> selectAll();
-    void updateById(Student o);
 }

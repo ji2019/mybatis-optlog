@@ -1,33 +1,43 @@
 package com.iw2f.mybatisoptlog.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.iw2f.mybatisoptlog.persistence.dao.CourseMapper;
-import com.iw2f.mybatisoptlog.persistence.pojo.Course;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.iw2f.mybatisoptlog.persistence.dao.CourseMapper;
+import com.iw2f.mybatisoptlog.persistence.pojo.Course;
+
+import iw2f.mybaits.plugin.optlog.annotation.ControllerLogs;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 public class IndexController {
 
-    @Autowired
-    private CourseMapper courseMapper;
+	private static AtomicInteger atomicInteger = new AtomicInteger(1);
 
-    //@PostMapping("/test")
-    //@ResponseBody
+	@Autowired
+	private CourseMapper courseMapper;
 
-    @GetMapping("/index")
-    @ResponseBody
-    public String getString() {
-        List<Course> courses =  courseMapper.selectAll();
-        String str = JSON.toJSONString(courses);
-        log.info(str);
-        return "";
-    }
+	@ControllerLogs
+	@GetMapping("/index")
+	public Object index() {
+		QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
+		List<Course> courses = courseMapper.selectList(queryWrapper);
+		String str = JSON.toJSONStringWithDateFormat(courses, "yyyy-MM-dd HH:mm:ss", SerializerFeature.PrettyFormat,
+				SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
+		int i = atomicInteger.getAndIncrement();
+		for (Course course : courses) {
+			course.setCourseHour(i);
+			courseMapper.updateById(course);
+		}
+		log.info(str);
+		return courses;
+	}
 }
