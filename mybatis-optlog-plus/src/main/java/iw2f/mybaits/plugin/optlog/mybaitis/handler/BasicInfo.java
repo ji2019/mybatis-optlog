@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,11 +24,6 @@ public class BasicInfo {
 	private static ConcurrentHashMap<String, List<FieldInfo>> fields = new ConcurrentHashMap<>();
 
 	/**
-	 * 数据源
-	 */
-	private DataSource dataSource;
-
-	/**
 	 * 表名
 	 */
 	private String tbName;
@@ -39,8 +33,8 @@ public class BasicInfo {
 	 */
 	private List<FieldInfo> fieldInfos;
 
-	public BasicInfo(DataSource dataSource, String tbName) {
-		this.dataSource = dataSource;
+	public BasicInfo(JdbcTemplate jdbcTemplate, String tbName) {
+		this.jdbcTemplate = jdbcTemplate;
 		this.tbName = tbName;
 	}
 

@@ -1,8 +1,6 @@
-package iw2f.mybaits.plugin.optlog.config;
+package iw2f.mybaits.plugin.optlog;
 
-import javax.sql.DataSource;
-
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,28 +23,26 @@ import lombok.AllArgsConstructor;
  *
  */
 @ComponentScan(basePackages = {"iw2f.mybaits.plugin.optlog"})
-@Configuration
 @AllArgsConstructor
 @EnableConfigurationProperties({ OptLogProperties.class })
 @ConditionalOnProperty(prefix = "optlog", name = "enable", havingValue = "true")
-@ConditionalOnBean({ DataSource.class,JdbcTemplate.class,DataLogHandler.class})
-public class DataLogConfig {
+public class OptLogAutoConfigure {
 
+	@Autowired
 	private final DataLogHandler dataLogHandler;
-
-	private final DataSource dataSource;
 	
+	@Autowired
 	private final JdbcTemplate jdbcTemplate;
 
 	@Bean
 	@ConditionalOnMissingBean
 	public OptLogStatementInterceptor optLogStatementInterceptor() {
-		return new OptLogStatementInterceptor(dataSource, dataLogHandler);
+		return new OptLogStatementInterceptor(jdbcTemplate, dataLogHandler);
 	}
 
 	@Bean
 	@ConditionalOnMissingBean
-	public OptLogger optLogService() {
+	public OptLogger optLogger() {
 		return new OptLogger(jdbcTemplate);
 	}
 

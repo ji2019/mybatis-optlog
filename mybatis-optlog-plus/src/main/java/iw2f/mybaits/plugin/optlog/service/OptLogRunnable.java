@@ -1,16 +1,15 @@
 package iw2f.mybaits.plugin.optlog.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.alibaba.fastjson.JSON;
 
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.OptLogBo;
 import lombok.AllArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 @AllArgsConstructor
 public class OptLogRunnable implements Runnable {
@@ -47,11 +46,7 @@ public class OptLogRunnable implements Runnable {
 		} catch (Exception e) {
 			logger.info(e.getMessage(), e);
 		} finally {
-			try {
-			jdbcTemplate.getDataSource().getConnection().commit();
-			} catch (SQLException e) {
-				logger.info(e.getMessage(), e);
-			}
+			
 		}
 	}
 

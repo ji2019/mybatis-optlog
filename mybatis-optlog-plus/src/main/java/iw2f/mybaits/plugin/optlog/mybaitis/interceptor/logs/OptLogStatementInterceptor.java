@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.sql.DataSource;
-
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -24,10 +22,10 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.alibaba.fastjson.JSON;
 
-import iw2f.mybaits.plugin.optlog.LogContext;
 import iw2f.mybaits.plugin.optlog.mybaitis.handler.BasicInfo;
 import iw2f.mybaits.plugin.optlog.mybaitis.handler.DataLogHandler;
 import iw2f.mybaits.plugin.optlog.mybaitis.handler.DeleteInfo;
@@ -36,6 +34,7 @@ import iw2f.mybaits.plugin.optlog.mybaitis.handler.UpdateInfo;
 import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.utils.DataUtils;
 import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.utils.PluginUtil;
 import iw2f.mybaits.plugin.optlog.mybaitis.interceptor.utils.SqlUtils;
+import iw2f.mybaits.plugin.optlog.utils.LogContext;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -58,7 +57,7 @@ public class OptLogStatementInterceptor implements Interceptor {
 
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private final DataSource dataSource;
+	private final JdbcTemplate jdbcTemplate;
 
 	private final DataLogHandler dataLogHandler;
 
@@ -172,7 +171,7 @@ public class OptLogStatementInterceptor implements Interceptor {
 						Object columnValue = params.get(i);
 						insertData.put(columnName, columnValue);
 					}
-					InsertInfo insertInfo = new InsertInfo(new BasicInfo(dataSource, tableName), tableName, insertData);
+					InsertInfo insertInfo = new InsertInfo(new BasicInfo(jdbcTemplate, tableName), tableName, insertData);
 					dataLogHandler.insertHandler(insertInfo);
 					System.out.println(JSON.toJSONString(insertData));
 				}
@@ -189,9 +188,9 @@ public class OptLogStatementInterceptor implements Interceptor {
 						updateData.put(column_name, column_value);
 					}
 					// 更新之前数据
-					List<Map<String, Object>> preUpdateData = new DataUtils().getPreUpdateData(dataSource, sql);
+					List<Map<String, Object>> preUpdateData = DataUtils.getPreUpdateData(jdbcTemplate, sql);
 					if (!preUpdateData.isEmpty()) {
-						UpdateInfo updateInfo = new UpdateInfo(new BasicInfo(dataSource, tableName), preUpdateData,
+						UpdateInfo updateInfo = new UpdateInfo(new BasicInfo(jdbcTemplate, tableName), preUpdateData,
 								updateData);
 						// 调用自定义处理方法
 						dataLogHandler.updateHandler(updateInfo);
@@ -202,9 +201,9 @@ public class OptLogStatementInterceptor implements Interceptor {
 				if (stmt instanceof Delete) {
 					Delete drop = (Delete) stmt;
 					String tableName = drop.getTable().getName();
-					List<Map<String, Object>> delObj = new DataUtils().getDelData(dataSource, sql);
+					List<Map<String, Object>> delObj = DataUtils.getDelData(jdbcTemplate, sql);
 					if (!delObj.isEmpty()) {
-						DeleteInfo deleteInfo = new DeleteInfo(new BasicInfo(dataSource, tableName), delObj);
+						DeleteInfo deleteInfo = new DeleteInfo(new BasicInfo(jdbcTemplate, tableName), delObj);
 						// 调用自定义处理方法
 						dataLogHandler.deleteHandler(deleteInfo);
 					}

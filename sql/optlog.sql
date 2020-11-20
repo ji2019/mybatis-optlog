@@ -13,8 +13,8 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for opt_log
 -- ----------------------------
-DROP TABLE IF EXISTS `opt_log`;
-CREATE TABLE `opt_log` (
+DROP TABLE IF EXISTS optlog.`opt_log`;
+CREATE TABLE optlog.`opt_log` (
   `log_id` varchar(32) NOT NULL COMMENT '日志ID',
   `user_id` varchar(36) DEFAULT NULL COMMENT '用户ID',
   `user_name` varchar(64) DEFAULT NULL COMMENT '用户名',

@@ -1,4 +1,6 @@
-package iw2f.mybaits.plugin.optlog;
+package iw2f.mybaits.plugin.optlog.utils;
+
+import javax.sql.DataSource;
 
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.OptLogBo;
 
@@ -9,13 +11,25 @@ public class LogContext {
 			return false;
 		}
 	};
-
+	
+	private static ThreadLocal<DataSource> dataSource = new ThreadLocal<DataSource>();
+	
 	private static ThreadLocal<OptLogBo> optLog = new ThreadLocal<OptLogBo>();
 
 	private static ThreadLocal<String> userId = new ThreadLocal<String>();
 
 	private static ThreadLocal<String> userName = new ThreadLocal<String>();
 
+	
+	public static DataSource dataSource() {
+		return dataSource.get();
+	}
+
+	public static void dataSource(DataSource dataSource) {
+		LogContext.dataSource.set(dataSource);
+	}
+	
+	
 	public static Boolean record() {
 		return record.get();
 	}

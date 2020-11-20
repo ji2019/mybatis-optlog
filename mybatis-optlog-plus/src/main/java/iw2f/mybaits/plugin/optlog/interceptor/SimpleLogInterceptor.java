@@ -17,11 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
-import iw2f.mybaits.plugin.optlog.LogContext;
 import iw2f.mybaits.plugin.optlog.annotation.ControllerLogs;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.OptBo;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.OptLogBo;
 import iw2f.mybaits.plugin.optlog.service.OptLogger;
+import iw2f.mybaits.plugin.optlog.utils.LogContext;
 import iw2f.mybaits.plugin.optlog.utils.Utils;
 
 public class SimpleLogInterceptor implements HandlerInterceptor {
@@ -32,6 +32,8 @@ public class SimpleLogInterceptor implements HandlerInterceptor {
 
 	@Autowired
 	private OptLogger optLogger;
+
+	
 
 	/**
 	 * before entering Controller
@@ -56,7 +58,7 @@ public class SimpleLogInterceptor implements HandlerInterceptor {
 		log.setUserName(LogContext.getUserName());
 		log.setUserId(LogContext.getUserId());
 		log.setUserIp(Utils.getRemoteAddr(request));
-		log.setJmethodDesc(controllerLogs.description());
+		log.setJmethodDesc(controllerLogs.value());
 		log.setCreateTime(new Date());
 		log.setRequestUrl(request.getRequestURI());
 		log.setMethod(request.getMethod());

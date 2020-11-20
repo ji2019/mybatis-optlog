@@ -25,15 +25,15 @@ public class IndexController {
 	@Autowired
 	private CourseMapper courseMapper;
 
-	@ControllerLogs
+	@ControllerLogs("编辑课程")
 	@GetMapping("/index")
 	public Object index() {
 		QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
 		List<Course> courses = courseMapper.selectList(queryWrapper);
 		String str = JSON.toJSONStringWithDateFormat(courses, "yyyy-MM-dd HH:mm:ss", SerializerFeature.PrettyFormat,
 				SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
-		int i = atomicInteger.getAndIncrement();
 		for (Course course : courses) {
+			int i = atomicInteger.getAndIncrement();
 			course.setCourseHour(i);
 			courseMapper.updateById(course);
 		}

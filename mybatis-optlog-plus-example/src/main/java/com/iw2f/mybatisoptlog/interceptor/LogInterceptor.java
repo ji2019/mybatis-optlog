@@ -2,10 +2,12 @@ package com.iw2f.mybatisoptlog.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import  iw2f.mybaits.plugin.optlog.interceptor.*;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
+
+import iw2f.mybaits.plugin.optlog.interceptor.SimpleLogInterceptor;
+import iw2f.mybaits.plugin.optlog.utils.LogContext;
 
 
 
@@ -22,8 +24,8 @@ public class LogInterceptor extends SimpleLogInterceptor {
 		//if (userEmployee == null) {
 			//return true;
 		//}
-		//LogContext.setUserId(userEmployee.getEmpId() + "");
-		//LogContext.setUserName(userEmployee.getEmpName());
+		LogContext.setUserId("empId");
+		LogContext.setUserName("EmpName");
 		return super.preHandle(request, response, handler);
 	}
 

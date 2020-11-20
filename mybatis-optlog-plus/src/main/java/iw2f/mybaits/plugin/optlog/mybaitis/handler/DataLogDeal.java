@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import iw2f.mybaits.plugin.optlog.LogContext;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.CompareResult;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.OptBo;
+import iw2f.mybaits.plugin.optlog.utils.LogContext;
 import lombok.SneakyThrows;
 
 /**

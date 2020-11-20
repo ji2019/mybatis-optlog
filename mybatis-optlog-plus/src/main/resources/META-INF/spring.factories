@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.=iw2f.mybaits.plugin.optlog.config.DataLogConfigEnableAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=iw2f.mybaits.plugin.optlog.OptLogAutoConfigure

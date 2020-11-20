@@ -20,8 +20,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for course
 -- ----------------------------
-DROP TABLE IF EXISTS `course`;
-CREATE TABLE `course`  (
+DROP TABLE IF EXISTS optlog.`course`;
+CREATE TABLE optlog.`course`  (
   `course_num` int(0) NOT NULL COMMENT '课程号',
   `course_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '课程名',
   `course_hour` int(0) NOT NULL COMMENT '课程学时',
@@ -33,16 +33,16 @@ CREATE TABLE `course`  (
 -- ----------------------------
 -- Records of course
 -- ----------------------------
-INSERT INTO `course` VALUES (1, '概率论', 5, 2);
-INSERT INTO `course` VALUES (2, 'MySQL', 5, 2);
-INSERT INTO `course` VALUES (3, '英语', 5, 3);
-INSERT INTO `course` VALUES (4, '毛概', 2, 5);
+INSERT INTO optlog.`course` VALUES (1, '概率论', 5, 2);
+INSERT INTO optlog.`course` VALUES (2, 'MySQL', 5, 2);
+INSERT INTO optlog.`course` VALUES (3, '英语', 5, 3);
+INSERT INTO optlog.`course` VALUES (4, '毛概', 2, 5);
 
 -- ----------------------------
 -- Table structure for score
 -- ----------------------------
-DROP TABLE IF EXISTS `score`;
-CREATE TABLE `score`  (
+DROP TABLE IF EXISTS optlog.`score`;
+CREATE TABLE optlog.`score`  (
   `score_id` int(0) NOT NULL,
   `course_num` int(0) NOT NULL,
   `student_num` int(0) NOT NULL,
@@ -57,28 +57,28 @@ CREATE TABLE `score`  (
 -- ----------------------------
 -- Records of score
 -- ----------------------------
-INSERT INTO `score` VALUES (1, 1, 15001, 89);
-INSERT INTO `score` VALUES (2, 1, 15002, 78);
-INSERT INTO `score` VALUES (3, 1, 15003, 80);
-INSERT INTO `score` VALUES (4, 1, 16004, 78);
-INSERT INTO `score` VALUES (5, 2, 15001, 85);
-INSERT INTO `score` VALUES (6, 2, 15002, 78);
-INSERT INTO `score` VALUES (7, 2, 15003, 75);
-INSERT INTO `score` VALUES (8, 2, 16004, 89);
-INSERT INTO `score` VALUES (9, 3, 15001, 87);
-INSERT INTO `score` VALUES (10, 3, 15002, 77);
-INSERT INTO `score` VALUES (11, 3, 15003, 88);
-INSERT INTO `score` VALUES (12, 3, 16004, 90);
-INSERT INTO `score` VALUES (13, 4, 15001, 90);
-INSERT INTO `score` VALUES (14, 4, 15002, 98);
-INSERT INTO `score` VALUES (15, 4, 15003, 89);
-INSERT INTO `score` VALUES (16, 4, 16004, 88);
+INSERT INTO optlog.`score` VALUES (1, 1, 15001, 89);
+INSERT INTO optlog.`score` VALUES (2, 1, 15002, 78);
+INSERT INTO optlog.`score` VALUES (3, 1, 15003, 80);
+INSERT INTO optlog.`score` VALUES (4, 1, 16004, 78);
+INSERT INTO optlog.`score` VALUES (5, 2, 15001, 85);
+INSERT INTO optlog.`score` VALUES (6, 2, 15002, 78);
+INSERT INTO optlog.`score` VALUES (7, 2, 15003, 75);
+INSERT INTO optlog.`score` VALUES (8, 2, 16004, 89);
+INSERT INTO optlog.`score` VALUES (9, 3, 15001, 87);
+INSERT INTO optlog.`score` VALUES (10, 3, 15002, 77);
+INSERT INTO optlog.`score` VALUES (11, 3, 15003, 88);
+INSERT INTO optlog.`score` VALUES (12, 3, 16004, 90);
+INSERT INTO optlog.`score` VALUES (13, 4, 15001, 90);
+INSERT INTO optlog.`score` VALUES (14, 4, 15002, 98);
+INSERT INTO optlog.`score` VALUES (15, 4, 15003, 89);
+INSERT INTO optlog.`score` VALUES (16, 4, 16004, 88);
 
 -- ----------------------------
 -- Table structure for student
 -- ----------------------------
-DROP TABLE IF EXISTS `student`;
-CREATE TABLE `student`  (
+DROP TABLE IF EXISTS optlog.`student`;
+CREATE TABLE optlog.`student`  (
   `student_num` int(0) NOT NULL COMMENT '学生学号',
   `student_name` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '学生姓名',
   `student_sex` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '男' COMMENT '学生性别',
@@ -90,9 +90,9 @@ CREATE TABLE `student`  (
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES (15001, 'Mark', '男', '1997-02-19');
-INSERT INTO `student` VALUES (15002, 'Wen', '男', '1997-09-16');
-INSERT INTO `student` VALUES (15003, 'Lee', '女', '1997-03-12');
-INSERT INTO `student` VALUES (16004, 'Mary', '女', '1996-07-12');
+INSERT INTO optlog.`student` VALUES (15001, 'Mark', '男', '1997-02-19');
+INSERT INTO optlog.`student` VALUES (15002, 'Wen', '男', '1997-09-16');
+INSERT INTO optlog.`student` VALUES (15003, 'Lee', '女', '1997-03-12');
+INSERT INTO optlog.`student` VALUES (16004, 'Mary', '女', '1996-07-12');
 
 SET FOREIGN_KEY_CHECKS = 1;

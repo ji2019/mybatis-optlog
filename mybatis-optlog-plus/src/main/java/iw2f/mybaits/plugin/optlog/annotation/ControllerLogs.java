@@ -14,5 +14,5 @@ public @interface ControllerLogs {
 	/**
 	 * 描述
 	 */
-	String description() default "";
+	String value() default "";
 }

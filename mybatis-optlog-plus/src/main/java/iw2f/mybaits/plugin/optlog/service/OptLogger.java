@@ -6,11 +6,11 @@ import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.OptLogBo;
 
-@Component
+@Service
 public class OptLogger {
 
 	private final ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
