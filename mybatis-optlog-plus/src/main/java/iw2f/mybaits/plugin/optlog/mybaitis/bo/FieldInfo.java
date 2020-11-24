@@ -25,4 +25,6 @@ public class FieldInfo {
      * 数据类型
      */
     private String dataType;
+
+    private Boolean primaryKey;
 }

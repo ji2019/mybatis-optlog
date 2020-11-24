@@ -2,7 +2,9 @@ package iw2f.mybaits.plugin.optlog.mybaitis.handler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import iw2f.mybaits.plugin.optlog.mybaitis.bo.EditBo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -51,7 +53,7 @@ public class DataLogDeal implements DataLogHandler {
 	 */
 	@SneakyThrows
 	public void updateHandler(UpdateInfo updateInfo) {
-		List<List<CompareResult>> cr = updateInfo.getCompareResult();
+		List<EditBo> cr = updateInfo.getCompareResult();
 		StringBuilder sb = new StringBuilder();
 		sb.append("更新 ");
 		sb.append(updateInfo.getBasicInfo().getTbName());
@@ -60,13 +62,16 @@ public class DataLogDeal implements DataLogHandler {
 		List<List<String>> updateer = new ArrayList<List<String>>();
 		List<String> no1 = new ArrayList<String>();
 		for (int i = 0; i < cr.size(); i++) {
-			List<CompareResult> e = cr.get(i);
+			EditBo editBo = cr.get(i);
+			List<CompareResult> e = editBo.getModifyField();
 			sb.append((i + 1) + "  ");
 			no1.clear();
 			e.forEach(r -> {
 				String s = "把《" + r.getFieldComment() + "》从<" + r.getOldValue() + ">改成<" + r.getNewValue() + ">";
 				no1.add(s);
 			});
+			List<Map<String,Object>> primaryKeys = editBo.getPrimaryKey();
+			no1.add(primaryKeys.toString());
 			updateer.add(no1);
 		}
 		opt.setData(updateer);

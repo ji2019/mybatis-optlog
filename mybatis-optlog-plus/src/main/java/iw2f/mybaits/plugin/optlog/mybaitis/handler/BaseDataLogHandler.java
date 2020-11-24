@@ -1,12 +1,9 @@
 package iw2f.mybaits.plugin.optlog.mybaitis.handler;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+import iw2f.mybaits.plugin.optlog.mybaitis.bo.EditBo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +35,7 @@ public abstract class BaseDataLogHandler {
 	 * @Description 对比两个对象
 	 * @author wangjc
 	 * @return List<List<CompareResult>>
-	 * @param oldObj
+	 * @param oldObjs
 	 *            旧对象
 	 * @param newObj
 	 *            新对象
@@ -46,22 +43,24 @@ public abstract class BaseDataLogHandler {
 	 * @throws IllegalAccessException
 	 * @date 2019年10月11日 下午3:02:59
 	 */
-	protected List<List<CompareResult>> compareTowObject(List<Map<String, Object>> oldObjs,
-			Map<String, Object> newObj) {
-		List<List<CompareResult>> list = new ArrayList<>();
+	protected List<EditBo> compareTowObject(List<Map<String, Object>> oldObjs, Map<String, Object> newObj) {
+		List<Map<String,Object>> primaryKey = new ArrayList<Map<String,Object>>();
+
+		List<EditBo> editBoList = new ArrayList<>();
 		for (Map<String, Object> oldObj : oldObjs) {
+			EditBo editBo = new EditBo();
 			// 单个对象比较结果
 			List<CompareResult> cor = new ArrayList<>();
 			for (String key : newObj.keySet()) {
 				String dataType = "";
 				// 匹配字段注释
-				Optional<FieldInfo> o = this.basicInfo.getFieldInfos().stream()
-						.filter(f -> key.equals(f.getJFieldName())).findFirst();
-				if (o.isPresent()) {
-					dataType = o.get().getDataType();
-				} else {
+				Optional<FieldInfo> o = this.basicInfo.getFieldInfos().stream().filter(f -> key.equals(f.getJFieldName())).findFirst();
+				if (!o.isPresent()) {
 					continue;
 				}
+				FieldInfo fi = o.get();
+				dataType = fi.getDataType();
+				String fieldName = fi.getFieldName();
 				if ("datetime".equals(dataType)) {
 					System.out.println(dataType);
 				}
@@ -76,14 +75,21 @@ public abstract class BaseDataLogHandler {
 					// Optional<FieldInfo> o = this.basicInfo.getFieldInfos().stream()
 					// .filter(f -> r.getFieldName().equals(f.getJFieldName())).findFirst();
 					if (o.isPresent()) {
-						r.setFieldComment(((FieldInfo) o.get()).getComment());
+						r.setFieldComment(fi.getComment());
 					}
 					cor.add(r);
 				}
+				if(fi.getPrimaryKey()){
+					Map<String,Object> pkObject = new HashMap<String,Object>();
+					pkObject.put(fieldName,o1);
+					primaryKey.add(pkObject);
+				}
 			}
-			list.add(cor);
+			editBo.setPrimaryKey(primaryKey);
+			editBo.setModifyField(cor);
+			editBoList.add(editBo);
 		}
-		return list;
+		return editBoList;
 	}
 
 	/**

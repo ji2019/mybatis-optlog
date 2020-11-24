@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.CompareResult;
+import iw2f.mybaits.plugin.optlog.mybaitis.bo.EditBo;
 import lombok.Getter;
 
 /**
@@ -31,7 +32,7 @@ public class UpdateInfo extends BaseDataLogHandler {
 		this.newObj = newObj;
 	}
 
-	public List<List<CompareResult>> getCompareResult() throws IllegalAccessException {
+	public List<EditBo> getCompareResult() throws IllegalAccessException {
 		return compareTowObject(this.oldObj, this.newObj);
 	}
 }

@@ -99,7 +99,7 @@ public class OptLogStatementInterceptor implements Interceptor {
 	 * @Description 对数据库操作传入参数进行处理
 	 * @author wangjc
 	 * @return void
-	 * @param invocation
+	 * @param metaObject
 	 * @date 2019年10月11日 下午5:31:38
 	 */
 	public void dealData(MetaObject metaObject) {
