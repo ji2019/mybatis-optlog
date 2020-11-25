@@ -1,9 +1,11 @@
 package iw2f.mybaits.plugin.optlog.mybaitis.handler;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.EditBo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,15 +65,19 @@ public class DataLogDeal implements DataLogHandler {
 		List<String> no1 = new ArrayList<String>();
 		for (int i = 0; i < cr.size(); i++) {
 			EditBo editBo = cr.get(i);
-			List<CompareResult> e = editBo.getModifyField();
+			List<CompareResult> e = editBo.getModifyColumns();
 			sb.append((i + 1) + "  ");
 			no1.clear();
-			e.forEach(r -> {
-				String s = "把《" + r.getFieldComment() + "》从<" + r.getOldValue() + ">改成<" + r.getNewValue() + ">";
-				no1.add(s);
-			});
+			StringBuilder modifyContent = new StringBuilder("ModifyContent : ");
+			for(Iterator<CompareResult> it = e.iterator();it.hasNext();){
+				CompareResult r = it.next();
+				modifyContent.append("把《" + r.getFieldComment() + "》从<" + r.getOldValue() + ">改成<" + r.getNewValue() + ">");
+				if(it.hasNext())
+					modifyContent.append(",");
+			}
+			no1.add(modifyContent.toString());
 			List<Map<String,Object>> primaryKeys = editBo.getPrimaryKey();
-			no1.add(primaryKeys.toString());
+			no1.add("PrimaryKeys : "+primaryKeys.toString());
 			updateer.add(no1);
 		}
 		opt.setData(updateer);

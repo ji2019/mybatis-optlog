@@ -13,5 +13,6 @@ public class EditBo {
 
     List<Map<String,Object>> primaryKey ;
 
-    List<CompareResult> modifyField;
+    List<CompareResult> modifyColumns;
+
 }

@@ -13,6 +13,8 @@ public class OptBo {
 	
 	private Object data;
 
+	private Object primaryKeys;
+
 	@Override
 	public String toString() {
 		return desc + " " + JSON.toJSONString(data);

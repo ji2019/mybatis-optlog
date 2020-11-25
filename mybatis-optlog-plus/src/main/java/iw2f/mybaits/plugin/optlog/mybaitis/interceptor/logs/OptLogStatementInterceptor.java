@@ -45,179 +45,175 @@ import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.update.Update;
 
 /**
- * 
  * @author wangjc
  * @date 2019年10月11日 下午5:33:00
- *
  */
 @AllArgsConstructor
 @Intercepts({
-		@Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class }) })
+        @Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class OptLogStatementInterceptor implements Interceptor {
 
-	protected final Logger log = LoggerFactory.getLogger(this.getClass());
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-	private final DataLogHandler dataLogHandler;
+    private final DataLogHandler dataLogHandler;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.ibatis.plugin.Interceptor#intercept(org.apache.ibatis.plugin.
-	 * Invocation)
-	 */
-	@Override
-	public Object intercept(Invocation invocation) throws Throwable {
-		try {
-			StatementHandler handler = (StatementHandler) PluginUtil.processTarget(invocation.getTarget());
-			MetaObject metaObject = SystemMetaObject.forObject(handler);
-			MappedStatement ms = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
-			// 获取xml中的一个select/update/insert/delete节点，是一条SQL语句
-			// MappedStatement mappedStatement = (MappedStatement)
-			// metaObject.getValue("delegate.mappedStatement");
-			// BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");//
-			// BoundSql就是封装myBatis最终产生的sql类
-			// Configuration configuration = mappedStatement.getConfiguration(); // 获取节点的配置
-			SqlCommandType sqlCmdType = ms.getSqlCommandType();
-			if (sqlCmdType == SqlCommandType.UPDATE || sqlCmdType == SqlCommandType.INSERT
-					|| sqlCmdType == SqlCommandType.DELETE) {
-				boolean record = LogContext.record();
-				if (record) {
-					this.dealData(metaObject);
-				}
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return invocation.proceed();
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.ibatis.plugin.Interceptor#intercept(org.apache.ibatis.plugin.
+     * Invocation)
+     */
+    @Override
+    public Object intercept(Invocation invocation) throws Throwable {
+        try {
+            StatementHandler handler = (StatementHandler) PluginUtil.processTarget(invocation.getTarget());
+            MetaObject metaObject = SystemMetaObject.forObject(handler);
+            MappedStatement ms = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
+            // 获取xml中的一个select/update/insert/delete节点，是一条SQL语句
+            // MappedStatement mappedStatement = (MappedStatement)
+            // metaObject.getValue("delegate.mappedStatement");
+            // BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");//
+            // BoundSql就是封装myBatis最终产生的sql类
+            // Configuration configuration = mappedStatement.getConfiguration(); // 获取节点的配置
+            SqlCommandType sqlCmdType = ms.getSqlCommandType();
+            if (sqlCmdType == SqlCommandType.UPDATE || sqlCmdType == SqlCommandType.INSERT
+                    || sqlCmdType == SqlCommandType.DELETE) {
+                boolean record = LogContext.record();
+                if (record) {
+                    this.dealData(metaObject);
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return invocation.proceed();
 
-	}
+    }
 
-	/**
-	 * 
-	 * @Description 对数据库操作传入参数进行处理
-	 * @author wangjc
-	 * @return void
-	 * @param metaObject
-	 * @date 2019年10月11日 下午5:31:38
-	 */
-	public void dealData(MetaObject metaObject) {
-		// 获取xml中的一个select/update/insert/delete节点，是一条SQL语句
-		MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
-		BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");// BoundSql就是封装myBatis最终产生的sql类
-		// 获取原始sql
-		Configuration configuration = mappedStatement.getConfiguration(); // 获取节点的配置
-		String sql = SqlUtils.getCompleteSQL(configuration, boundSql);
-		SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
-		//因为替换后会出现有的值为空。SQL解析错误。就用原生的SQL了
-		if(SqlCommandType.INSERT.equals(sqlCommandType)) {
-			sql = boundSql.getSql();
-		}
-		log.info("sql ===>> " + sql);
-		List<Object> params = SqlUtils.getSqlParams(configuration, boundSql);
-		log.info("params ===>> " + params);
-		// 参数
-		this.doLog(mappedStatement, sql, params);
-	}
+    /**
+     * @param metaObject
+     * @return void
+     * @Description 对数据库操作传入参数进行处理
+     * @author wangjc
+     * @date 2019年10月11日 下午5:31:38
+     */
+    public void dealData(MetaObject metaObject) {
+        // 获取xml中的一个select/update/insert/delete节点，是一条SQL语句
+        MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
+        BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");// BoundSql就是封装myBatis最终产生的sql类
+        // 获取原始sql
+        Configuration configuration = mappedStatement.getConfiguration(); // 获取节点的配置
+        String sql = SqlUtils.getCompleteSQL(configuration, boundSql);
+        SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
+        //因为替换后会出现有的值为空。SQL解析错误。就用原生的SQL了
+        if (SqlCommandType.INSERT.equals(sqlCommandType)) {
+            sql = boundSql.getSql();
+        }
+        log.info("sql ===>> " + sql);
+        List<Object> params = SqlUtils.getSqlParams(configuration, boundSql);
+        log.info("params ===>> " + params);
+        // 参数
+        this.doLog(mappedStatement, sql, params);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.ibatis.plugin.Interceptor#plugin(java.lang.Object)
-	 */
-	@Override
-	public Object plugin(Object target) {
-		if (target instanceof StatementHandler) {
-			return Plugin.wrap(target, this);
-		} else {
-			return target;
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.ibatis.plugin.Interceptor#plugin(java.lang.Object)
+     */
+    @Override
+    public Object plugin(Object target) {
+        if (target instanceof StatementHandler) {
+            return Plugin.wrap(target, this);
+        } else {
+            return target;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.ibatis.plugin.Interceptor#setProperties(java.util.Properties)
-	 */
-	@Override
-	public void setProperties(Properties properties) {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.ibatis.plugin.Interceptor#setProperties(java.util.Properties)
+     */
+    @Override
+    public void setProperties(Properties properties) {
+    }
 
-	/**
-	 * 
-	 * @Description 根据不同参数及操作进行不同的日志记录
-	 * @author wangjc
-	 * @return void
-	 * @param mappedStatement
-	 * @param et
-	 * @date 2019年10月11日 下午5:31:06
-	 */
-	public void doLog(MappedStatement mappedStatement, String sql, List<Object> params) {
-		try {
-			// DataSource dataSource =
-			// mappedStatement.getConfiguration().getEnvironment().getDataSource();
-			Statement stmt = CCJSqlParserUtil.parse(new StringReader(sql));
-			SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
-			// 插入
-			if (SqlCommandType.INSERT.equals(sqlCommandType)) {
-				if (stmt instanceof Insert) {
-					Insert insert = (Insert) stmt;
-					String tableName = insert.getTable().getName();
-					List<Column> columns = insert.getColumns();
-					LinkedHashMap<String, Object> insertData = new LinkedHashMap<String, Object>();
-					for (int i = 0; i < columns.size(); i++) {
-						String columnName = columns.get(i).getColumnName();
-						Object columnValue = params.get(i);
-						insertData.put(columnName, columnValue);
-					}
-					InsertInfo insertInfo = new InsertInfo(new BasicInfo(jdbcTemplate, tableName), tableName, insertData);
-					dataLogHandler.insertHandler(insertInfo);
-					System.out.println(JSON.toJSONString(insertData));
-				}
-				// 更新
-			} else if (SqlCommandType.UPDATE.equals(sqlCommandType)) {
-				if ((stmt instanceof Update)) {
-					Update updateStatement = (Update) stmt;
-					String tableName = updateStatement.getTables().get(0).getName();
-					List<Column> update_columns = updateStatement.getColumns();
-					Map<String, Object> updateData = new HashMap<String, Object>();
-					for (int i = 0; i < update_columns.size(); i++) {
-						String column_name = update_columns.get(i).getColumnName();
-						Object column_value = params.get(i);
-						updateData.put(column_name, column_value);
-					}
-					// 更新之前数据
-					List<Map<String, Object>> preUpdateData = DataUtils.getPreUpdateData(jdbcTemplate, sql);
-					if (!preUpdateData.isEmpty()) {
-						UpdateInfo updateInfo = new UpdateInfo(new BasicInfo(jdbcTemplate, tableName), preUpdateData,
-								updateData);
-						// 调用自定义处理方法
-						dataLogHandler.updateHandler(updateInfo);
-					}
-				}
-				// 删除
-			} else if (SqlCommandType.DELETE.equals(sqlCommandType)) {
-				if (stmt instanceof Delete) {
-					Delete drop = (Delete) stmt;
-					String tableName = drop.getTable().getName();
-					List<Map<String, Object>> delObj = DataUtils.getDelData(jdbcTemplate, sql);
-					if (!delObj.isEmpty()) {
-						DeleteInfo deleteInfo = new DeleteInfo(new BasicInfo(jdbcTemplate, tableName), delObj);
-						// 调用自定义处理方法
-						dataLogHandler.deleteHandler(deleteInfo);
-					}
-				}
-			}
-			// BoundSql boundSql = null;
-			// StatementDeParser deParser = new StatementDeParser(new StringBuilder());
-			// stmt.accept(deParser);
-			// sql = deParser.getBuffer().toString();
-			// ReflectionUtils.setFieldValue(boundSql, "sql", sql);
+    /**
+     * @param mappedStatement
+     * @param sql
+     * @param params
+     * @return void
+     * @Description 根据不同参数及操作进行不同的日志记录
+     * @author wangjc
+     * @date 2019年10月11日 下午5:31:06
+     */
+    public void doLog(MappedStatement mappedStatement, String sql, List<Object> params) {
+        try {
+            // DataSource dataSource =
+            // mappedStatement.getConfiguration().getEnvironment().getDataSource();
+            Statement stmt = CCJSqlParserUtil.parse(new StringReader(sql));
+            SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
+            // 插入
+            if (SqlCommandType.INSERT.equals(sqlCommandType)) {
+                if (stmt instanceof Insert) {
+                    Insert insert = (Insert) stmt;
+                    String tableName = insert.getTable().getName();
+                    List<Column> columns = insert.getColumns();
+                    LinkedHashMap<String, Object> insertData = new LinkedHashMap<String, Object>();
+                    for (int i = 0; i < columns.size(); i++) {
+                        String columnName = columns.get(i).getColumnName();
+                        Object columnValue = params.get(i);
+                        insertData.put(columnName, columnValue);
+                    }
+                    InsertInfo insertInfo = new InsertInfo(new BasicInfo(jdbcTemplate, tableName), tableName, insertData);
+                    dataLogHandler.insertHandler(insertInfo);
+                    System.out.println(JSON.toJSONString(insertData));
+                }
+                // 更新
+            } else if (SqlCommandType.UPDATE.equals(sqlCommandType)) {
+                if ((stmt instanceof Update)) {
+                    Update updateStatement = (Update) stmt;
+                    String tableName = updateStatement.getTables().get(0).getName();
+                    List<Column> update_columns = updateStatement.getColumns();
+                    Map<String, Object> updateData = new HashMap<String, Object>();
+                    for (int i = 0; i < update_columns.size(); i++) {
+                        String column_name = update_columns.get(i).getColumnName();
+                        Object column_value = params.get(i);
+                        updateData.put(column_name, column_value);
+                    }
+                    // 更新之前数据
+                    List<Map<String, Object>> preUpdateData = DataUtils.getPreUpdateData(jdbcTemplate, sql);
+                    if (!preUpdateData.isEmpty()) {
+                        UpdateInfo updateInfo = new UpdateInfo(new BasicInfo(jdbcTemplate, tableName), preUpdateData, updateData);
+                        // 调用自定义处理方法
+                        dataLogHandler.updateHandler(updateInfo);
+                    }
+                }
+                // 删除
+            } else if (SqlCommandType.DELETE.equals(sqlCommandType)) {
+                if (stmt instanceof Delete) {
+                    Delete drop = (Delete) stmt;
+                    String tableName = drop.getTable().getName();
+                    List<Map<String, Object>> delObj = DataUtils.getDelData(jdbcTemplate, sql);
+                    if (!delObj.isEmpty()) {
+                        DeleteInfo deleteInfo = new DeleteInfo(new BasicInfo(jdbcTemplate, tableName), delObj);
+                        // 调用自定义处理方法
+                        dataLogHandler.deleteHandler(deleteInfo);
+                    }
+                }
+            }
+            // BoundSql boundSql = null;
+            // StatementDeParser deParser = new StatementDeParser(new StringBuilder());
+            // stmt.accept(deParser);
+            // sql = deParser.getBuffer().toString();
+            // ReflectionUtils.setFieldValue(boundSql, "sql", sql);
 
-		} catch (JSQLParserException e) {
-			log.info(e.getMessage(), e);
-		}
-	}
+        } catch (JSQLParserException e) {
+            log.info(e.getMessage(), e);
+        }
+    }
 
 }

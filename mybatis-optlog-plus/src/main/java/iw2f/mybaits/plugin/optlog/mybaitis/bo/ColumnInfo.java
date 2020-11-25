@@ -7,8 +7,7 @@ import lombok.Data;
  *
  */
 @Data
-public class FieldInfo {
-
+public class ColumnInfo {
     /**
      * 字段名
      */
@@ -27,4 +26,5 @@ public class FieldInfo {
     private String dataType;
 
     private Boolean primaryKey;
+
 }
