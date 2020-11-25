@@ -41,6 +41,7 @@ public abstract class BaseDataLogHandler {
 
         List<EditBo> editBoList = new ArrayList<>();
         for (Map<String, Object> oldObj : oldObjs) {
+            Map<String, Object> pkObject = new HashMap<String, Object>();
             EditBo editBo = new EditBo();
             // 单个对象比较结果
             List<CompareResult> modifyColumns = new ArrayList<>();
@@ -54,7 +55,7 @@ public abstract class BaseDataLogHandler {
                 String jFieldName = fieldInfo.getJFieldName();
                 Object oldVal = oldObj.get(columnName);
                 //更新字段
-                if (newObj.containsKey(jFieldName)) {
+                if (newObj.containsKey(columnName)) {
                     String dataType = fieldInfo.getDataType();
                     Object newVal = convertSqlType(newObj.get(columnName), dataType);
                     if (!compareTwo(oldVal, newVal)) {
@@ -71,12 +72,12 @@ public abstract class BaseDataLogHandler {
                 }
                 //主键数据
                 if (fieldInfo.getPrimaryKey()) {
-                    Map<String, Object> pkObject = new HashMap<String, Object>();
+
                     pkObject.put(columnName, oldVal);
                     primaryKey.add(pkObject);
                 }
             }
-            editBo.setPrimaryKey(primaryKey);
+            editBo.setPrimaryKeys(pkObject);
             editBo.setModifyColumns(modifyColumns);
             editBoList.add(editBo);
         }

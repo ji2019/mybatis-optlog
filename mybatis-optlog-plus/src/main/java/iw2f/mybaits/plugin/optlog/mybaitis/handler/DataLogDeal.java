@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import iw2f.mybaits.plugin.optlog.mybaitis.bo.EditBo;
 import org.slf4j.Logger;
@@ -62,8 +63,8 @@ public class DataLogDeal implements DataLogHandler {
 		sb.append(" 表 ");
 		OptBo opt = new OptBo();
 		List<List<String>> updateer = new ArrayList<List<String>>();
-		List<String> no1 = new ArrayList<String>();
 		for (int i = 0; i < cr.size(); i++) {
+			List<String> no1 = new ArrayList<String>();
 			EditBo editBo = cr.get(i);
 			List<CompareResult> e = editBo.getModifyColumns();
 			sb.append((i + 1) + "  ");
@@ -76,8 +77,8 @@ public class DataLogDeal implements DataLogHandler {
 					modifyContent.append(",");
 			}
 			no1.add(modifyContent.toString());
-			List<Map<String,Object>> primaryKeys = editBo.getPrimaryKey();
-			no1.add("PrimaryKeys : "+primaryKeys.toString());
+			Map<String,Object> primaryKeys = editBo.getPrimaryKeys();
+			no1.add("PrimaryKeys : "+ JSON.toJSONString(primaryKeys));
 			updateer.add(no1);
 		}
 		opt.setData(updateer);

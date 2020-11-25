@@ -11,7 +11,7 @@ import java.util.Map;
 @Getter
 public class EditBo {
 
-    List<Map<String,Object>> primaryKey ;
+    Map<String,Object> primaryKeys ;
 
     List<CompareResult> modifyColumns;
 
